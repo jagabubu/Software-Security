@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New case</title>
+</head>
+<body>
+<h1>Report a new incident</h1>
+
+<form th:action="@{/cases/new}" th:object="${form}" method="post">
+
+    <p>Title<br>
+        <input type="text" th:field="*{title}" maxlength="120">
+        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+    </p>
+
+    <p>Description<br>
+        <textarea th:field="*{description}" rows="6" cols="60"></textarea>
+        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+    </p>
+
+    <p>Category<br>
+        <select th:field="*{category}">
+            <option th:each="c : ${categories}" th:value="${c}" th:text="${c}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+    </p>
+
+    <p>Severity<br>
+        <select th:field="*{severity}">
+            <option th:each="s : ${severities}" th:value="${s}" th:text="${s}"></option>
+        </select>
+        <span th:if="${#fields.hasErrors('severity')}" th:errors="*{severity}"></span>
+    </p>
+
+    <button type="submit">Create case</button>
+</form>
+
+<p><a th:href="@{/cases}">Back to cases</a></p>
+</body>
+</html>
