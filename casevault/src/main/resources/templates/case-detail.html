@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Case</title></head>
+<body>
+<h1 th:text="${incident.title}">Title</h1>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+<ul>
+    <li>Organisation: <span th:text="${incident.organisation.name}"></span></li>
+    <li>Category: <span th:text="${incident.category}"></span></li>
+    <li>Severity: <span th:text="${incident.severity}"></span></li>
+    <li>Status: <span th:text="${incident.status}"></span></li>
+    <li th:if="${incident.owner != null}">Owner: <span th:text="${incident.owner.username}"></span></li>
+    <li th:if="${incident.owner == null}">Owner: Unassigned</li>
+</ul>
+<p th:text="${incident.description}" style="white-space: pre-wrap"></p>
+
+<div th:if="${canAssign}">
+    <form th:action="@{/cases/{id}/assign(id=${incident.id})}" method="post">
+        <select name="analyst">
+            <option th:each="a : ${analysts}" th:value="${a.username}" th:text="${a.username}"></option>
+        </select>
+        <button type="submit">Assign</button>
+    </form>
+</div>
+
+<h2>Remediation actions</h2>
+<ul>
+    <li th:each="a : ${actions}">
+        <strong th:text="${a.author.username}"></strong>:
+        <span th:text="${a.description}"></span>
+    </li>
+</ul>
+<form th:if="${canWork}" th:action="@{/cases/{id}/actions(id=${incident.id})}" method="post">
+    <input type="text" name="description" maxlength="500" size="60">
+    <button type="submit">Add action</button>
+</form>
+
+<div th:if="${canWork or canAssign}">
+    <h2>Investigation notes (internal)</h2>
+    <ul>
+        <li th:each="n : ${notes}">
+            <strong th:text="${n.author.username}"></strong>
+            <small th:text="${n.createdAt}"></small>:
+            <span th:text="${n.content}" style="white-space: pre-wrap"></span>
+        </li>
+    </ul>
+    <form th:if="${canWork}" th:action="@{/cases/{id}/notes(id=${incident.id})}" method="post">
+        <textarea name="content" rows="4" cols="60" maxlength="2000"></textarea><br>
+        <button type="submit">Add note</button>
+    </form>
+</div>
+
+<p><a th:href="@{/cases}">Back to cases</a></p>
+</body>
+</html>
