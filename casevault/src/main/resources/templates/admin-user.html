@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>User accounts</title></head>
+<body>
+<h1>User accounts</h1>
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+
+<table border="1" cellpadding="6">
+    <tr><th>Username</th><th>Role</th><th>Organisation</th><th>Enabled</th><th>Action</th></tr>
+    <tr th:each="u : ${users}">
+        <td th:text="${u.username}"></td>
+        <td th:text="${u.role}"></td>
+        <td th:text="${u.organisation.name}"></td>
+        <td th:text="${u.enabled}"></td>
+        <td>
+            <form th:if="${u.enabled}" th:action="@{/admin/users/disable}" method="post">
+                <input type="hidden" name="username" th:value="${u.username}">
+                <button type="submit">Disable</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<p><a th:href="@{/admin/audit}">Audit log</a> | <a th:href="@{/}">Home</a></p>
+</body>
+</html>

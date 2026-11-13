@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>CaseVault</title></head>
+<body>
+<h1>CaseVault</h1>
+<p>Logged in as <strong th:text="${username}"></strong> (<span th:text="${role}"></span>)</p>
+
+<ul>
+    <li th:if="${canSeeCases}"><a th:href="@{/cases}">Cases</a></li>
+    <li th:if="${canCreateCase}"><a th:href="@{/cases/new}">Report a new incident</a></li>
+    <li th:if="${isAdmin}"><a th:href="@{/admin/audit}">Audit log</a></li>
+    <li th:if="${isAdmin}"><a th:href="@{/admin/users}">User accounts</a></li>
+</ul>
+
+<form th:action="@{/logout}" method="post"><button type="submit">Log out</button></form>
+</body>
+</html>
