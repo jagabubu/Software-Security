@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Evidence</title></head>
+<body>
+<h1>Evidence for case <span th:text="${caseId}"></span></h1>
+<p th:if="${message}" th:text="${message}" style="color:green"></p>
+<p th:if="${error}" th:text="${error}" style="color:red"></p>
+
+<table border="1" cellpadding="6">
+    <tr><th>File</th><th>Type</th><th>Size (bytes)</th><th>Uploaded by</th><th>SHA-256</th></tr>
+    <tr th:each="f : ${files}">
+        <td><a th:href="@{/cases/{cid}/evidence/{eid}(cid=${caseId},eid=${f.id})}"
+               th:text="${f.originalName}"></a></td>
+        <td th:text="${f.fileType}"></td>
+        <td th:text="${f.sizeBytes}"></td>
+        <td th:text="${f.uploader.username}"></td>
+        <td><small th:text="${f.sha256}"></small></td>
+    </tr>
+</table>
+
+<form th:if="${canUpload}" th:action="@{/cases/{id}/evidence(id=${caseId})}"
+      method="post" enctype="multipart/form-data">
+    <p>Allowed: txt, log, csv, pdf, png. Maximum 2 MB. Synthetic test files only.</p>
+    <input type="file" name="file" accept=".txt,.log,.csv,.pdf,.png">
+    <button type="submit">Upload</button>
+</form>
+
+<p><a th:href="@{/cases/{id}(id=${caseId})}">Back to case</a></p>
+</body>
+</html>
