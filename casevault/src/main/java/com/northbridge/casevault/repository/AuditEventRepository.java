@@ -11,5 +11,7 @@ public interface AuditEventRepository extends Repository<AuditEvent, Long> {
 
     List<AuditEvent> findAllByOrderByEventTimeDesc();
 
+    List<AuditEvent> findTop100ByOrderByEventTimeDesc();
+
     long count();
 }

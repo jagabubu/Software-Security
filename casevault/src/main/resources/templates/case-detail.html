@@ -24,6 +24,15 @@
     </form>
 </div>
 
+<div th:if="${canChangeStatus and not #lists.isEmpty(nextStatuses)}">
+    <form th:action="@{/cases/{id}/status(id=${incident.id})}" method="post">
+        <select name="status">
+            <option th:each="s : ${nextStatuses}" th:value="${s}" th:text="${s}"></option>
+        </select>
+        <button type="submit">Change status</button>
+    </form>
+</div>
+
 <h2>Remediation actions</h2>
 <ul>
     <li th:each="a : ${actions}">
@@ -50,7 +59,7 @@
         <button type="submit">Add note</button>
     </form>
 </div>
-
+<p><a th:href="@{/cases/{id}/evidence(id=${incident.id})}">Evidence files</a></p>
 <p><a th:href="@{/cases}">Back to cases</a></p>
 </body>
 </html>

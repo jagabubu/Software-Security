@@ -2,6 +2,8 @@ package com.northbridge.casevault.model;
 
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "cases")
@@ -68,4 +70,33 @@ public class IncidentCase {
     public User getOwner() { return owner; }
     public User getCreatedBy() { return createdBy; }
     public Instant getCreatedAt() { return createdAt; }
+
+    public void assignTo(User analyst) {
+        this.owner = analyst;
+        if (this.status == Status.OPEN) {
+            this.status = Status.IN_PROGRESS;
+        }
+    }
+
+    // THE single place that decides which status changes are allowed
+    public List<Status> allowedNextStatuses() {
+        List<Status> result = new ArrayList<>();
+        for (Status candidate : Status.values()) {
+            if (!status.canMoveTo(candidate)) {
+                continue;
+            }
+            if (status == Status.OPEN && owner == null) {
+                continue;   // a case with no owner cannot be started
+            }
+            result.add(candidate);
+        }
+        return result;
+    }
+
+    public void changeStatus(Status next) {
+        if (!allowedNextStatuses().contains(next)) {
+            throw new IllegalStateException("Status change not allowed");
+        }
+        this.status = next;
+    }
 }

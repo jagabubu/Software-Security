@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 public class CaseVaultUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final LoginAttemptService loginAttemptService;
 
-    public CaseVaultUserDetailsService(UserRepository userRepository) {
+    public CaseVaultUserDetailsService(UserRepository userRepository,
+                                       LoginAttemptService loginAttemptService) {
         this.userRepository = userRepository;
+        this.loginAttemptService = loginAttemptService;
     }
 
     @Override
@@ -26,6 +29,7 @@ public class CaseVaultUserDetailsService implements UserDetailsService {
                 .password(user.getPasswordHash())
                 .roles(user.getRole().name())
                 .disabled(!user.isEnabled())
+                .accountLocked(loginAttemptService.isLocked(user.getUsername()))
                 .build();
     }
 }

@@ -48,6 +48,8 @@ public class DevDataLoader implements CommandLineRunner {
         User acmeClient = addUser("acme_client1", Role.CLIENT, acme);
         User birchClient = addUser("birch_client1", Role.CLIENT, birch);
         addUser("analyst1", Role.ANALYST, northbridge);
+        addUser("analyst2", Role.ANALYST, northbridge);
+        addUser("temp_analyst", Role.ANALYST, northbridge);
         addUser("manager1", Role.CASE_MANAGER, northbridge);
         addUser("auditor1", Role.AUDITOR_ADMIN, northbridge);
 
